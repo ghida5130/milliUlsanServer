@@ -1,5 +1,4 @@
 const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 const path = require("path");
 const axios = require("axios");
@@ -8,6 +7,7 @@ const { parseStringPromise } = require("xml2js");
 const fs = require("fs");
 const csv = require("csv-parser");
 const iconv = require("iconv-lite");
+const cors = require("cors");
 
 const onServerStart = require("./src/startup");
 const scheduleTask = require("./src/schedules");
@@ -20,27 +20,14 @@ app.listen(port, () => {
     scheduleTask();
 });
 
-// app.use(express.static(path.join(__dirname, "front/public")));
-
-// app.get("/", function (req, res) {
-//     res.sendFile(path.join(__dirname, "front/public/index.html"));
-// });
-
-// app.use(
-//     "/",
-//     createProxyMiddleware({
-//         target: "http://localhost:3000", // 리액트 개발 서버
-//         changeOrigin: true,
-//     })
-// );
-
-// app.use((req, res, next) => {
-//     res.sendFile(path.resolve(__dirname, "front/public/index.html"));
-// });
-
 app.use(express.json());
-var cors = require("cors");
-app.use(cors());
+
+app.use(
+    cors({
+        origin: "https://milli-ulsan.vercel.app",
+        methods: ["GET", "POST"],
+    })
+);
 
 app.get("/api/airkorea/dust", async (req, res) => {
     const time = new Date();
