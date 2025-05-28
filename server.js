@@ -24,7 +24,7 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: "https://milli-ulsan.vercel.app",
+        origin: process.env.CORS_ORIGIN,
         methods: ["GET", "POST"],
     })
 );
